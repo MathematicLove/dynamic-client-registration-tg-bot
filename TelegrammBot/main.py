@@ -90,9 +90,6 @@ while True:
     STATE_NO_SHOW_REASON,
 ) = range(10)
 
-# --------------------------------------------------------------------------------
-# Команды /start и /info
-# --------------------------------------------------------------------------------
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "Привет, я бот для записи!\n\nВведи /start, чтобы открыть меню и записаться."
@@ -105,9 +102,6 @@ async def info_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     return STATE_MENU
 
-# --------------------------------------------------------------------------------
-# Главное меню (CallbackQuery)
-# --------------------------------------------------------------------------------
 async def menu_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     user_id = query.from_user.id
@@ -162,9 +156,6 @@ async def menu_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.message.reply_text("Неизвестная команда. Возвращаю вас в меню.", reply_markup=main_menu_keyboard())
         return STATE_MENU
 
-# --------------------------------------------------------------------------------
-# Процесс записи: FIO -> PHONE -> DATE -> TIME
-# --------------------------------------------------------------------------------
 async def sign_up_fio(update: Update, context: ContextTypes.DEFAULT_TYPE):
     fio = update.message.text.strip()
     parts = fio.split()
@@ -289,9 +280,6 @@ async def sign_up_time_callback(update: Update, context: ContextTypes.DEFAULT_TY
     await query.message.reply_text("Возвращаю вас в меню.", reply_markup=main_menu_keyboard())
     return STATE_MENU
 
-# --------------------------------------------------------------------------------
-# Логика напоминаний за 10 минут до записи
-# --------------------------------------------------------------------------------
 REMINDER_OPTIONS_KEYBOARD = InlineKeyboardMarkup([
     [InlineKeyboardButton("Да, приду", callback_data="reminder_yes"),
      InlineKeyboardButton("Да, но опоздаю", callback_data="reminder_late")],
@@ -407,9 +395,6 @@ async def no_show_reason_text(update: Update, context: ContextTypes.DEFAULT_TYPE
     await update.message.reply_text("Возвращаю вас в меню.", reply_markup=main_menu_keyboard())
     return STATE_MENU
 
-# --------------------------------------------------------------------------------
-# Отмена записи
-# --------------------------------------------------------------------------------
 async def cancel_confirm(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     answer = update.message.text.strip().lower()
@@ -436,9 +421,6 @@ async def cancel_confirm(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Возвращаю вас в меню.", reply_markup=main_menu_keyboard())
     return STATE_MENU
 
-# --------------------------------------------------------------------------------
-# Изменение записи
-# --------------------------------------------------------------------------------
 async def change_fio(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     new_fio = update.message.text.strip()
@@ -550,10 +532,7 @@ async def change_time_callback(update: Update, context: ContextTypes.DEFAULT_TYP
     )
     await query.message.reply_text("Возвращаю вас в меню.", reply_markup=main_menu_keyboard())
     return STATE_MENU
-
-# --------------------------------------------------------------------------------
-# Принудительная отмена записи
-# --------------------------------------------------------------------------------
+    
 async def cancel_conversation(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Действие отменено. Возвращаю вас в меню.", reply_markup=main_menu_keyboard())
     return STATE_MENU
@@ -621,10 +600,6 @@ async def run_java_parser(context: ContextTypes.DEFAULT_TYPE):
         logger.info("Парсер обновил JSON:")
         logger.info(run_process.stdout)
 
-
-# --------------------------------------------------------------------------------
-# Запуск бота
-# --------------------------------------------------------------------------------
 def main():
     from dotenv import load_dotenv
     load_dotenv("/Users/ayzek/Desktop/Ayzek/Любимка/ОПД - 2 курс/TelegrammBot/.env")
